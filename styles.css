@@ -175,3 +175,234 @@ main, header{ position: relative; z-index: 101; }
     100%{ transform: translateY(0); }
 }
 .book{ animation: floaty 6s ease-in-out infinite; }
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 32px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.2);
+    animation: slideDown 0.3s ease;
+    position: relative;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    color: var(--muted);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    transition: color 0.2s;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--accent);
+}
+
+.modal-content h2 {
+    margin-bottom: 24px;
+    color: var(--accent);
+    font-size: 1.75rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(44, 62, 80, 0.15);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #ffffff;
+    color: var(--accent);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 8px;
+}
+
+.submit-btn:hover {
+    background-color: #1a252f;
+    transform: translateY(-1px);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.form-switch {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.form-switch a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.form-switch a:hover {
+    color: #1a252f;
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    min-height: 20px;
+}
+
+/* User Greeting and Logout Button */
+.user-greeting {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.buttonlogout {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(44, 62, 80, 0.08);
+    background: transparent;
+    cursor: pointer;
+    color: var(--accent);
+    transition: background-color 0.2s;
+}
+
+.buttonlogout:hover {
+    background-color: rgba(44, 62, 80, 0.05);
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: var(--accent);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: opacity 0.3s, transform 0.3s;
+    max-width: 350px;
+    font-size: 0.9rem;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Responsive Modal */
+@media (max-width: 700px) {
+    .modal-content {
+        margin: 15% auto;
+        padding: 24px;
+        width: 95%;
+    }
+
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+
+    .notification.show {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 420px) {
+    .user-greeting {
+        display: none !important;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+}

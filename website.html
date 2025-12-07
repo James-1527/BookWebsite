@@ -22,7 +22,9 @@
                 <input type="text" class="search-box" placeholder="Search for...">
                 <button class="search-button">Search</button>
             </div>
-            <button class="buttonlogin">Log in</button>
+            <button class="buttonlogin" id="loginButton">Log in</button>
+            <button class="buttonlogout" id="logoutButton" style="display: none;">Log out</button>
+            <span id="userGreeting" class="user-greeting" style="display: none;"></span>
         </div>
     </header>
 
@@ -32,7 +34,58 @@
             <p></p>
         </section>
     </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Log In</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <button type="submit" class="submit-btn">Log In</button>
+                <p class="form-switch">Don't have an account? <a href="#" id="switchToRegister">Register</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" name="password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" name="confirmPassword" required>
+                </div>
+                <div id="registerError" class="error-message"></div>
+                <button type="submit" class="submit-btn">Register</button>
+                <p class="form-switch">Already have an account? <a href="#" id="switchToLogin">Log In</a></p>
+            </form>
+        </div>
+    </div>
     
     <script src="book.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>
