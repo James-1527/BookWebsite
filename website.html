@@ -19,8 +19,9 @@
         </nav>
         <div class="actions">
             <div class="search-container">
-                <input type="text" class="search-box" placeholder="Search for...">
+                <input type="text" id="search-box" placeholder="Search for..."  oninput="handleInput()">
                 <button class="search-button">Search</button>
+                <div id="result"></div>
             </div>
             <button class="buttonlogin" id="loginButton">Log in</button>
             <button class="buttonlogout" id="logoutButton" style="display: none;">Log out</button>
@@ -87,5 +88,6 @@
     
     <script src="book.js"></script>
     <script src="auth.js"></script>
+    <script src="search.js"></script>
 </body>
 </html>
