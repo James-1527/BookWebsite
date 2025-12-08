@@ -390,8 +390,9 @@ main, header{ position: relative; z-index: 101; }
     display:flex;
     gap:6px;
     align-items:center;
+    position: relative;
 }
-.search-box{
+#search-box{
     padding:8px 10px;
     border-radius:6px;
     border:1px solid rgba(44,62,80,0.08);
@@ -405,3 +406,31 @@ main, header{ position: relative; z-index: 101; }
     color: white;
     cursor:pointer;
 }
+.book_item img {
+        width: 80px;
+        height: 100px;
+        background: rgb(206, 218, 217)
+        
+      }
+.book_item {
+        display: grid;
+        gap: 15px;
+        background: rgb(249, 252, 252);
+        padding: 10px;
+        margin-bottom: 10px;
+        position: sticky;
+        right: 20px;
+      }
+#result {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid rgba(44,62,80,0.1);
+        background: white;
+        box-shadow: 0 4px 12px rgba(44,62,80,0.1);
+        border-radius: 6px;
+        z-index: 1000;
+      }
