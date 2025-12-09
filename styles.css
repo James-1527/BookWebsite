@@ -79,10 +79,15 @@ header {
   text-align: left;
 }
 .hero h2 {
+<<<<<<< HEAD
   font-size: 3rem;
   margin-bottom: 8px;
 
   
+=======
+  font-size: 2rem;
+  margin-bottom: 8px;
+>>>>>>> 0032774f368f55d127c515c612f255d948170ebd
 }
 .hero p {
   color: var(--muted);
@@ -475,7 +480,11 @@ header {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
+<<<<<<< HEAD
   background: rgb(205, 212, 212);
+=======
+  background: rgb(105, 220, 226);
+>>>>>>> 0032774f368f55d127c515c612f255d948170ebd
 }
 
 .book-list {
@@ -501,7 +510,11 @@ header {
 
 .book-card:hover {
   transform: translateY(-8px);
+<<<<<<< HEAD
   background: rgb(233, 236, 236);
+=======
+  background: rgb(9, 202, 232);
+>>>>>>> 0032774f368f55d127c515c612f255d948170ebd
 }
 
 .book-title {
@@ -510,4 +523,8 @@ header {
   margin-top: 12px;
   font-size: 16px;
   color: #060606;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0032774f368f55d127c515c612f255d948170ebd
