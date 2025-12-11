@@ -24,6 +24,25 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
+  opacity: 0;
+}
+
+body.fade-in {
+  animation: fadeInPage 0.5s ease forwards;
+}
+
+body.page-exit {
+  animation: fadeOutPage 0.35s ease forwards;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutPage {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(6px); }
 }
 
 /* Container */

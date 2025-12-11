@@ -160,9 +160,11 @@ const booksData = [
 
 let currentCategory = 'all';
 let currentBooks = [...booksData];
+const CURRENT_USER_KEY = 'currentUser';
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('fade-in');
     renderBooks(currentBooks);
     
     // Add Enter key support for search
@@ -174,6 +176,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    updateAuthUI();
+
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        const searchContainer = document.querySelector('.search-container');
+        const searchResult = document.getElementById('search-result');
+        if (searchContainer && searchResult && !searchContainer.contains(e.target)) {
+            searchResult.classList.remove('show');
+        }
+    });
 });
 
 // Render books in the grid
@@ -349,45 +362,46 @@ function scrollToReviews() {
     }
 }
 
-// Login functionality
+function getCurrentUser() {
+    try {
+        return JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+    } catch (error) {
+        console.error('Failed to parse current user', error);
+        return null;
+    }
+}
+
+function updateAuthUI() {
+    const loginButton = document.getElementById('loginButton');
+    const logoutButton = document.getElementById('logoutButton');
+    const userGreeting = document.getElementById('userGreeting');
+    if (!loginButton || !logoutButton || !userGreeting) return;
+
+    const user = getCurrentUser();
+    if (user) {
+        loginButton.style.display = 'none';
+        logoutButton.style.display = 'inline-block';
+        userGreeting.style.display = 'inline-block';
+        userGreeting.textContent = `Hello, ${user.name}!`;
+    } else {
+        loginButton.style.display = 'inline-block';
+        logoutButton.style.display = 'none';
+        userGreeting.style.display = 'none';
+        userGreeting.textContent = '';
+    }
+}
+
 function handleLogin() {
-    const username = prompt('Enter your username:');
-    if (username) {
-        localStorage.setItem('username', username);
-        document.getElementById('loginButton').style.display = 'none';
-        document.getElementById('logoutButton').style.display = 'inline-block';
-        document.getElementById('userGreeting').style.display = 'inline-block';
-        document.getElementById('userGreeting').textContent = `Hello, ${username}!`;
-    }
+    document.body.classList.add('page-exit');
+    setTimeout(() => {
+        window.location.href = 'Auth/login.html';
+    }, 300);
 }
 
-// Logout functionality
 function handleLogout() {
-    localStorage.removeItem('username');
-    document.getElementById('loginButton').style.display = 'inline-block';
-    document.getElementById('logoutButton').style.display = 'none';
-    document.getElementById('userGreeting').style.display = 'none';
+    localStorage.removeItem(CURRENT_USER_KEY);
+    updateAuthUI();
 }
-
-// Check if user is logged in on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const username = localStorage.getItem('username');
-    if (username) {
-        document.getElementById('loginButton').style.display = 'none';
-        document.getElementById('logoutButton').style.display = 'inline-block';
-        document.getElementById('userGreeting').style.display = 'inline-block';
-        document.getElementById('userGreeting').textContent = `Hello, ${username}!`;
-    }
-    
-    // Close search results when clicking outside
-    document.addEventListener('click', function(e) {
-        const searchContainer = document.querySelector('.search-container');
-        const searchResult = document.getElementById('search-result');
-        if (searchContainer && searchResult && !searchContainer.contains(e.target)) {
-            searchResult.classList.remove('show');
-        }
-    });
-});
 
 // Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
