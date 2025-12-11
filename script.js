@@ -197,7 +197,7 @@ function renderBooks(books) {
     if (books.length === 0) {
         reviewsGrid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">
-                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 16px; opacity: 1;"></i>
                 <p style="font-size: 1.2rem;">No books found. Try a different search or category.</p>
             </div>
         `;
