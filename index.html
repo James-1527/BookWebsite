@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TT Book - Book Reviews</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+      <div class="logo">
+        <h1><i class="fas fa-book"></i> TT Book</h1>
+      </div>
+      <nav class="navigation">
+        <a href="#home">Home</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#categories">Categories</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="actions">
+        <div class="search-container">
+          <input type="text" id="search-box" placeholder="Search for books..." oninput="handleSearch()">
+          <button class="search-button" onclick="handleSearch()"><i class="fas fa-search"></i></button>
+          <div id="search-result" class="search-result"></div>
+        </div>
+        <button class="buttonlogin" id="loginButton" onclick="handleLogin()">Log in</button>
+        <button class="buttonlogout" id="logoutButton" style="display: none" onclick="handleLogout()">Log out</button>
+        <span id="userGreeting" class="user-greeting" style="display: none"></span>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Discover Your Next Great Read</h2>
+            <p>Honest reviews, thoughtful insights, and curated recommendations</p>
+        </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h3>Browse by Category</h3>
+            <div class="category-tags">
+                <button class="category-tag active" data-category="all" onclick="filterByCategory('all')">All</button>
+                <button class="category-tag" data-category="fiction" onclick="filterByCategory('fiction')">Fiction</button>
+                <button class="category-tag" data-category="non-fiction" onclick="filterByCategory('non-fiction')">Non-Fiction</button>
+                <button class="category-tag" data-category="mystery" onclick="filterByCategory('mystery')">Mystery</button>
+                <button class="category-tag" data-category="sci-fi" onclick="filterByCategory('sci-fi')">Sci-Fi</button>
+                <button class="category-tag" data-category="romance" onclick="filterByCategory('romance')">Romance</button>
+                <button class="category-tag" data-category="biography" onclick="filterByCategory('biography')">Biography</button>
+                <button class="category-tag" data-category="self-help" onclick="filterByCategory('self-help')">Self-Help</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content" id="reviews">
+        <div class="container">
+            <!-- Featured Review Section -->
+            <section class="featured-section">
+                <h2 class="section-title"><i class="fas fa-star"></i> Featured Review</h2>
+                <div class="featured-review">
+                    <div class="featured-book-cover">
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop" alt="Featured Book">
+                        <div class="rating-badge">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <div class="featured-review-content">
+                        <h3>The Seven Husbands of Evelyn Hugo</h3>
+                        <div class="book-meta">
+                            <span class="author"><i class="fas fa-user"></i> Taylor Jenkins Reid</span>
+                            <span class="genre"><i class="fas fa-tag"></i> Historical Fiction</span>
+                            <span class="date"><i class="fas fa-calendar"></i> Published: 2017</span>
+                        </div>
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="rating-text">5.0 / 5.0</span>
+                        </div>
+                        <div class="review-text">
+                            <p>A mesmerizing tale of old Hollywood glamour, ambition, and forbidden love. Taylor Jenkins Reid crafts an unforgettable narrative through the lens of a reclusive Hollywood icon recounting her life story. The novel masterfully explores themes of identity, sacrifice, and the price of fame, keeping readers captivated from the first page to the last.</p>
+                            <p>The characters are deeply layered and authentic, and the plot twists are both shocking and satisfying. This is a book that will stay with you long after you've turned the final page.</p>
+                        </div>
+                        <div class="review-footer">
+                            <div class="reviewer">
+                                <div class="reviewer-avatar">JS</div>
+                                <div class="reviewer-info">
+                                    <div class="reviewer-name">Jane Smith</div>
+                                    <div class="review-date">Reviewed on March 15, 2024</div>
+                                </div>
+                            </div>
+                            <button class="read-more-btn" onclick="viewFullReview('featured-1')">Read Full Review</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Reviews Section -->
+            <section class="reviews-section">
+                <h2 class="section-title"><i class="fas fa-book-open"></i> Latest Reviews</h2>
+                <div class="reviews-grid" id="reviews-grid">
+                    <!-- Review cards will be dynamically generated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-book"></i> TT Book</h3>
+                    <p>Your trusted source for honest book reviews and literary recommendations.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#reviews">Reviews</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-goodreads"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> info@ttbook.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TT Book. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
