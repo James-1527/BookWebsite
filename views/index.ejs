@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,30 @@
     <link rel="stylesheet" href="/stylesheets/UI.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Navigation Header -->
     <header>
-      <div class="logo">
-        <h1><i class="fas fa-book"></i> TT Book</h1>
-      </div>
-      <nav class="navigation">
-        <a href="#home">Home</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#categories">Categories</a>
-      </nav>
-      <div class="actions">
-        <div class="search-container">
-          <input type="text" id="search-box" placeholder="Search for books..." oninput="handleSearch()">
-          <button class="search-button" onclick="handleSearch()"><i class="fas fa-search"></i></button>
-          <div id="search-result" class="search-result"></div>
+        <div class="logo">
+            <h1><i class="fas fa-book"></i> TT Book</h1>
         </div>
-        <button class="buttonlogin" id="loginButton" type="button" onclick="handleLogin()">Log in</button>
-        <button class="buttonlogout" id="logoutButton" type="button" style="display: none" onclick="handleLogout()">Log out</button>
-        <span id="userGreeting" class="user-greeting" style="display: none"></span>
-      </div>
+        <nav class="navigation">
+            <a href="#home">Home</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#categories">Categories</a>
+        </nav>
+        <div class="actions">
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search for books..." oninput="handleSearch()"
+                    role="combobox" aria-expanded="false" aria-controls="search-result" autocomplete="off">
+                <button class="search-button" onclick="handleSearch()"><i class="fas fa-search"></i></button>
+                <div id="search-result" class="search-result"></div>
+            </div>
+            <button class="buttonlogin" id="loginButton" type="button" onclick="handleLogin()">Log in</button>
+            <button class="buttonlogout" id="logoutButton" type="button" style="display: none"
+                onclick="handleLogout()">Log out</button>
+            <span id="userGreeting" class="user-greeting" style="display: none"></span>
+        </div>
     </header>
 
     <!-- Hero Section -->
@@ -44,13 +48,19 @@
             <h3>Browse by Category</h3>
             <div class="category-tags">
                 <button class="category-tag active" data-category="all" onclick="filterByCategory('all')">All</button>
-                <button class="category-tag" data-category="fiction" onclick="filterByCategory('fiction')">Fiction</button>
-                <button class="category-tag" data-category="non-fiction" onclick="filterByCategory('non-fiction')">Non-Fiction</button>
-                <button class="category-tag" data-category="mystery" onclick="filterByCategory('mystery')">Mystery</button>
+                <button class="category-tag" data-category="fiction"
+                    onclick="filterByCategory('fiction')">Fiction</button>
+                <button class="category-tag" data-category="non-fiction"
+                    onclick="filterByCategory('non-fiction')">Non-Fiction</button>
+                <button class="category-tag" data-category="mystery"
+                    onclick="filterByCategory('mystery')">Mystery</button>
                 <button class="category-tag" data-category="sci-fi" onclick="filterByCategory('sci-fi')">Sci-Fi</button>
-                <button class="category-tag" data-category="romance" onclick="filterByCategory('romance')">Romance</button>
-                <button class="category-tag" data-category="biography" onclick="filterByCategory('biography')">Biography</button>
-                <button class="category-tag" data-category="self-help" onclick="filterByCategory('self-help')">Self-Help</button>
+                <button class="category-tag" data-category="romance"
+                    onclick="filterByCategory('romance')">Romance</button>
+                <button class="category-tag" data-category="biography"
+                    onclick="filterByCategory('biography')">Biography</button>
+                <button class="category-tag" data-category="self-help"
+                    onclick="filterByCategory('self-help')">Self-Help</button>
             </div>
         </div>
     </section>
@@ -63,7 +73,8 @@
                 <h2 class="section-title"><i class="fas fa-star"></i> Featured Review</h2>
                 <div class="featured-review">
                     <div class="featured-book-cover">
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop" alt="Featured Book">
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop"
+                            alt="Featured Book">
                         <div class="rating-badge">
                             <i class="fas fa-star"></i>
                             <span>4.8</span>
@@ -87,8 +98,13 @@
                             <span class="rating-text">5.0 / 5.0</span>
                         </div>
                         <div class="review-text">
-                            <p>A mesmerizing tale of old Hollywood glamour, ambition, and forbidden love. Taylor Jenkins Reid crafts an unforgettable narrative through the lens of a reclusive Hollywood icon recounting her life story. The novel masterfully explores themes of identity, sacrifice, and the price of fame, keeping readers captivated from the first page to the last.</p>
-                            <p>The characters are deeply layered and authentic, and the plot twists are both shocking and satisfying. This is a book that will stay with you long after you've turned the final page.</p>
+                            <p>A mesmerizing tale of old Hollywood glamour, ambition, and forbidden love. Taylor Jenkins
+                                Reid crafts an unforgettable narrative through the lens of a reclusive Hollywood icon
+                                recounting her life story. The novel masterfully explores themes of identity, sacrifice,
+                                and the price of fame, keeping readers captivated from the first page to the last.</p>
+                            <p>The characters are deeply layered and authentic, and the plot twists are both shocking
+                                and satisfying. This is a book that will stay with you long after you've turned the
+                                final page.</p>
                         </div>
                         <div class="review-footer">
                             <div class="reviewer">
@@ -98,7 +114,7 @@
                                     <div class="review-date">Reviewed on March 15, 2024</div>
                                 </div>
                             </div>
-                            <button class="read-more-btn" onclick="viewFullReview('featured-1')">Read Full Review</button>
+                            <button class="read-more-btn" onclick="viewFullReview(1)">Read Full Review</button>
                         </div>
                     </div>
                 </div>
@@ -152,6 +168,18 @@
         </div>
     </footer>
 
+    <!-- Book detail modal -->
+    <div id="book-modal" class="modal" aria-hidden="true">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+            <div class="modal-body" id="modal-body">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
     <script src="/javascripts/script.js"></script>
 </body>
+
 </html>

@@ -32,8 +32,36 @@ function getCurrentUser() {
     }
 }
 
-function showMessage(message) {
-    alert(message);
+// Toast Notification Logic
+function showMessage(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        alert(message); // Fallback
+        return;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    if (type === 'error') icon = 'fa-exclamation-circle';
+
+    toast.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 registerBtn.addEventListener('click', () => {
@@ -51,26 +79,26 @@ signUpForm.addEventListener('submit', (event) => {
     const password = document.getElementById('signUpPassword').value.trim();
 
     if (!name || !email || !password) {
-        showMessage('Please fill in all fields.');
+        showMessage('Please fill in all fields.', 'error');
         return;
     }
 
     if (password.length < 6) {
-        showMessage('Password should be at least 6 characters long.');
+        showMessage('Password should be at least 6 characters long.', 'error');
         return;
     }
 
     const users = loadUsers();
     const existingUser = users.find(user => user.email === email);
     if (existingUser) {
-        showMessage('An account with this email already exists. Please sign in.');
+        showMessage('An account with this email already exists. Please sign in.', 'error');
         container.classList.remove('active');
         return;
     }
 
     users.push({ name, email, password });
     saveUsers(users);
-    showMessage('Account created! Please sign in.');
+    showMessage('Account created! Please sign in.', 'success');
     container.classList.remove('active');
     signUpForm.reset();
 });
@@ -84,16 +112,16 @@ signInForm.addEventListener('submit', (event) => {
     const user = users.find(u => u.email === email && u.password === password);
 
     if (!user) {
-        showMessage('Invalid email or password. Please try again.');
+        showMessage('Invalid email or password. Please try again.', 'error');
         return;
     }
 
     setCurrentUser({ name: user.name, email: user.email });
-    showMessage(`Welcome back, ${user.name}! Redirecting to the site...`);
+    showMessage(`Welcome back, ${user.name}! Redirecting to the site...`, 'success');
     signInForm.reset();
     document.body.classList.add('page-exit');
     setTimeout(() => {
-        window.location.href = './index';
+        window.location.href = '/';
     }, 300);
 });
 
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loggedInUser = getCurrentUser();
     if (loggedInUser) {
         setTimeout(() => {
-        window.location.href = './index';
-    }, 300);
+            window.location.href = '/';
+        }, 300);
     }
 });
