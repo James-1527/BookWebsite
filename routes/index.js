@@ -1,31 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-
-const booksPath = path.join(__dirname, '../data/books.json');
-
-// Helper to read books
-const getBooks = () => {
-  const data = fs.readFileSync(booksPath, 'utf8');
-  return JSON.parse(data);
-};
-
-// Helper to save books
-const saveBooks = (books) => {
-  fs.writeFileSync(booksPath, JSON.stringify(books, null, 2), 'utf8');
-};
+const Book = require('../models/listbook');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'TT Book' });
+/* GET home page. */
+router.get('/', async function (req, res, next) {
+  try {
+    const featuredBook = await Book.findOne().sort({ rating: -1 });
+    res.render('index', { title: 'TT Book', featuredBook });
+  } catch (err) {
+    console.error("Error fetching featured book:", err);
+    res.render('index', { title: 'TT Book', featuredBook: null });
+  }
 });
 
 /* API: Get all books */
-router.get('/api/books', (req, res) => {
+router.get('/api/books', async (req, res) => {
   try {
-    const books = getBooks();
-    res.json(books);
+    const books = await Book.find();
+    // Map _id to id for frontend compatibility if needed, but better to update frontend
+    const booksWithId = books.map(b => {
+      const bookObj = b.toObject();
+      bookObj.id = bookObj._id; // Ensure id property exists for frontend compatibility
+      return bookObj;
+    });
+    res.json(booksWithId);
   } catch (error) {
     console.error("Failed to retrieve books:", error);
     res.status(500).json({ error: "Failed to retrieve books" });
@@ -33,50 +32,127 @@ router.get('/api/books', (req, res) => {
 });
 
 /* View: Book Details */
-router.get('/books/:id', (req, res) => {
-  const books = getBooks();
-  const book = books.find(b => b.id === parseInt(req.params.id));
-  if (book) {
-    res.render('book', { book });
-  } else {
-    res.status(404).send('Book not found');
+router.get('/books/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (book) {
+      res.render('book', {
+        book,
+        currentUserId: req.cookies.userId
+      });
+    } else {
+      res.status(404).send('Book not found');
+    }
+  } catch (err) {
+    res.status(404).send('Book not found or invalid ID');
   }
 });
 
 /* View: Edit Book */
-router.get('/books/:id/edit', (req, res) => {
-  const books = getBooks();
-  const book = books.find(b => b.id === parseInt(req.params.id));
-  if (book) {
+/* View: Edit Book */
+router.get('/books/:id/edit', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).send('Book not found');
+    }
+
+    // Authorization Check
+    if (book.creatorId && book.creatorId !== req.cookies.userId) {
+      return res.status(403).send('Unauthorized to edit this book');
+    }
+
     res.render('edit', { book });
-  } else {
+  } catch (err) {
     res.status(404).send('Book not found');
   }
 });
 
-/* API: Update Book */
-router.post('/books/:id', (req, res) => {
-  const books = getBooks();
-  const bookIndex = books.findIndex(b => b.id === parseInt(req.params.id));
+/* View: Add Book */
+/* View: Add Book */
+router.get('/create-book', (req, res) => {
+  if (!req.cookies.userId) {
+    return res.redirect('/login#login'); // Redirect to login if not authenticated
+  }
+  res.render('create');
+});
 
-  if (bookIndex > -1) {
-    // Update fields
-    const updatedBook = {
-      ...books[bookIndex],
+/* API: Create Book */
+/* API: Create Book */
+router.post('/create-book', async (req, res) => {
+  try {
+    if (!req.cookies.userId) {
+      return res.status(401).send("Unauthorized: Please log in");
+    }
+
+    const newBook = new Book({
       title: req.body.title,
       author: req.body.author,
-      category: req.body.category, // Keep as category for display
-      genre: req.body.genre,       // Keep genre for filtering
+      creatorId: req.cookies.userId,
+      genre: req.body.genre,
+      category: req.body.category,
+      publishedYear: req.body.publishedYear,
+      rating: req.body.rating,
+      image: req.body.image,
       review: req.body.review,
-      rating: parseFloat(req.body.rating)
+      reviewer: req.body.reviewer,
+      reviewDate: req.body.reviewDate || new Date().toLocaleDateString()
+    });
+    await newBook.save();
+    res.redirect('/'); // Or return JSON if strictly API
+  } catch (err) {
+    console.error("Error creating book:", err);
+    res.status(500).send("Error creating book");
+  }
+});
+
+/* API: Update Book */
+/* API: Update Book */
+router.post('/books/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).send("Book not found");
+
+    // Authorization Check
+    if (book.creatorId && book.creatorId !== req.cookies.userId) {
+      return res.status(403).send("Unauthorized to update this book");
+    }
+
+    const updateData = {
+      title: req.body.title,
+      author: req.body.author,
+      category: req.body.category,
+      genre: req.body.genre,
+      review: req.body.review,
+      rating: parseFloat(req.body.rating),
+      image: req.body.image
     };
 
-    books[bookIndex] = updatedBook;
-    saveBooks(books);
-
+    await Book.findByIdAndUpdate(req.params.id, updateData);
     res.redirect(`/books/${req.params.id}`);
-  } else {
-    res.status(404).send('Book not found');
+  } catch (err) {
+    console.error("Error updating book:", err);
+    res.status(500).send("Error updating book");
+  }
+});
+
+/* API: Delete Book */
+/* API: Delete Book */
+router.post('/delete-book/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).send("Book not found");
+
+    // Authorization Check
+    if (book.creatorId && book.creatorId !== req.cookies.userId) {
+      return res.status(403).send("Unauthorized to delete this book");
+    }
+
+    await Book.findByIdAndDelete(req.params.id);
+    res.redirect('/');
+  } catch (err) {
+    console.error("Error deleting book:", err);
+    res.status(500).send("Error deleting book");
   }
 });
 

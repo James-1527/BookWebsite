@@ -88,18 +88,38 @@ function renderBooks(books) {
             <img src="${book.image}" alt="${book.title}" class="card-book-cover" onerror="this.src='https://via.placeholder.com/300x450/2c3e50/ffffff?text=${encodeURIComponent(book.title)}'">
             <div class="card-body">
                 <h4 class="card-title">${book.title}</h4>
-                <p class="card-author">by ${book.author}</p>
-                <div class="card-rating">
-                    <div class="stars">${generateStars(book.rating)}</div>
-                    <span class="rating-value">${book.rating.toFixed(1)}</span>
+                <div class="card-meta-info">
+                    <span class="meta-tag"><i class="fas fa-tag"></i> ${book.category || book.genre || 'Uncategorized'}</span>
+                    <span class="meta-year"><i class="fas fa-calendar-alt"></i> ${book.publishedYear || 'N/A'}</span>
                 </div>
+                <p class="card-author">by ${book.author || 'Unknown Author'}</p>
+                <div class="card-rating">
+                    <div class="stars">${generateStars(book.rating || 0)}</div>
+                    <span class="rating-value">${(book.rating || 0).toFixed(1)}</span>
+                </div>
+                <p class="card-excerpt">${truncate(book.review, 140)}</p>
                 <div class="card-footer">
-                    <span class="card-reviewer">Reviewed by ${book.reviewer}</span>
+                    <div class="footer-meta">
+                        <span class="card-reviewer">Reviewed by ${book.reviewer || 'Anonymous'}</span>
+                        <span class="card-date">${book.reviewDate || ''}</span>
+                    </div>
                     <button class="view-review-btn" onclick="viewFullReview(${book.id})">Read More</button>
                 </div>
             </div>
         </div>
     `).join('');
+
+    // Attach click handlers to open modal with book details
+    setTimeout(() => {
+        document.querySelectorAll('.review-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                // Prevent opening modal when clicking on the 'Read More' button (which navigates to book page)
+                if (e.target.closest('.view-review-btn')) return;
+                const id = parseInt(this.getAttribute('data-id'), 10);
+                openBookModal(id);
+            });
+        });
+    }, 0);
 }
 
 // Generate star rating HTML
@@ -198,6 +218,73 @@ function selectBook(bookId) {
 function viewFullReview(bookId) {
     // Navigate directly to the book page
     window.location.href = `/books/${bookId}`;
+}
+
+// Truncate text to length
+function truncate(text, maxLength = 120) {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim() + '...';
+}
+
+// Modal handling
+function openBookModal(bookId) {
+    const modal = document.getElementById('book-modal');
+    const modalBody = document.getElementById('modal-body');
+    const overlay = document.getElementById('modal-overlay');
+    const closeBtn = document.getElementById('modal-close');
+    if (!modal || !modalBody) return;
+
+    const book = booksData.find(b => b.id === bookId);
+    if (!book) return;
+
+    modalBody.innerHTML = `
+        <div class="modal-left">
+            <img class="modal-cover" src="${book.image}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/300x450/2c3e50/ffffff?text=${encodeURIComponent(book.title)}'" />
+        </div>
+        <div class="modal-info">
+            <h3 id="modal-title">${book.title}</h3>
+            <div class="modal-meta">
+                <span><i class="fas fa-user"></i> ${book.author}</span>
+                <span><i class="fas fa-tag"></i> ${book.category || book.genre}</span>
+                <span><i class="fas fa-calendar"></i> ${book.publishedYear || ''}</span>
+            </div>
+            <div class="rating">
+                <div class="stars">${generateStars(book.rating)}</div>
+                <span class="rating-text">${book.rating.toFixed(1)} / 5.0</span>
+            </div>
+            <div class="modal-review">${book.review}</div>
+            <div class="reviewer" style="margin-top: 18px;">
+                <div class="reviewer-avatar">${(book.reviewer || 'R').split(' ').map(n => n[0]).slice(0, 2).join('')}</div>
+                <div class="reviewer-info">
+                    <div class="reviewer-name">${book.reviewer}</div>
+                    <div class="review-date">${book.reviewDate || ''}</div>
+                </div>
+            </div>
+            <div style="margin-top:18px;">
+                <button class="read-more-btn" onclick="viewFullReview(${book.id})">Read Full Review</button>
+            </div>
+        </div>
+    `;
+
+    modal.classList.add('open');
+    document.querySelector('.modal-content')?.classList.add('opening');
+
+    function onClose() {
+        modal.classList.remove('open');
+        document.querySelector('.modal-content')?.classList.remove('opening');
+        overlay.removeEventListener('click', onClose);
+        closeBtn.removeEventListener('click', onClose);
+        document.removeEventListener('keydown', onEsc);
+    }
+
+    function onEsc(e) {
+        if (e.key === 'Escape') onClose();
+    }
+
+    overlay.addEventListener('click', onClose);
+    closeBtn.addEventListener('click', onClose);
+    document.addEventListener('keydown', onEsc);
 }
 
 // Scroll to reviews section

@@ -6,18 +6,8 @@ const signInForm = document.getElementById('signInForm');
 const USERS_KEY = 'users';
 const CURRENT_USER_KEY = 'currentUser';
 
-function loadUsers() {
-    try {
-        return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-    } catch (error) {
-        console.error('Failed to parse users from storage', error);
-        return [];
-    }
-}
+// No local user management needed
 
-function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
 
 function setCurrentUser(user) {
     localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
@@ -72,7 +62,7 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove('active');
 });
 
-signUpForm.addEventListener('submit', (event) => {
+signUpForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = document.getElementById('signUpName').value.trim();
     const email = document.getElementById('signUpEmail').value.trim().toLowerCase();
@@ -88,41 +78,57 @@ signUpForm.addEventListener('submit', (event) => {
         return;
     }
 
-    const users = loadUsers();
-    const existingUser = users.find(user => user.email === email);
-    if (existingUser) {
-        showMessage('An account with this email already exists. Please sign in.', 'error');
-        container.classList.remove('active');
-        return;
-    }
+    try {
+        const response = await fetch('/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
 
-    users.push({ name, email, password });
-    saveUsers(users);
-    showMessage('Account created! Please sign in.', 'success');
-    container.classList.remove('active');
-    signUpForm.reset();
+        const data = await response.json();
+
+        if (response.ok) {
+            showMessage(data.message, 'success');
+            container.classList.remove('active');
+            signUpForm.reset();
+        } else {
+            showMessage(data.error || 'Registration failed', 'error');
+        }
+    } catch (err) {
+        console.error('Register error', err);
+        showMessage('An error occurred. Please try again.', 'error');
+    }
 });
 
-signInForm.addEventListener('submit', (event) => {
+signInForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const email = document.getElementById('signInEmail').value.trim().toLowerCase();
     const password = document.getElementById('signInPassword').value.trim();
 
-    const users = loadUsers();
-    const user = users.find(u => u.email === email && u.password === password);
+    try {
+        const response = await fetch('/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-    if (!user) {
-        showMessage('Invalid email or password. Please try again.', 'error');
-        return;
+        const data = await response.json();
+
+        if (response.ok) {
+            setCurrentUser(data.user);
+            showMessage(`Welcome back, ${data.user.name}! Redirecting...`, 'success');
+            signInForm.reset();
+            document.body.classList.add('page-exit');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 300);
+        } else {
+            showMessage(data.error || 'Login failed', 'error');
+        }
+    } catch (err) {
+        console.error('Login error', err);
+        showMessage('An error occurred. Please try again.', 'error');
     }
-
-    setCurrentUser({ name: user.name, email: user.email });
-    showMessage(`Welcome back, ${user.name}! Redirecting to the site...`, 'success');
-    signInForm.reset();
-    document.body.classList.add('page-exit');
-    setTimeout(() => {
-        window.location.href = '/';
-    }, 300);
 });
 
 document.addEventListener('DOMContentLoaded', () => {

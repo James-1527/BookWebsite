@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Book - TT Book</title>
+    <link rel="stylesheet" href="/stylesheets/UI.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .edit-form {
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="logo">
+            <h1><a href="/" style="text-decoration: none; color: inherit;"><i class="fas fa-book"></i> TT Book</a></h1>
+        </div>
+        <nav class="navigation">
+            <a href="/">Home</a>
+            <a href="/#reviews">Reviews</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h2 class="section-title" style="justify-content: center;">Add New Book</h2>
+
+            <form class="edit-form" action="/create-book" method="POST">
+                <div class="form-group">
+                    <label for="title">Book Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Genre (for filtering)</label>
+                    <select id="genre" name="genre">
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-Fiction</option>
+                        <option value="mystery">Mystery</option>
+                        <option value="sci-fi">Sci-Fi</option>
+                        <option value="romance">Romance</option>
+                        <option value="biography">Biography</option>
+                        <option value="self-help">Self-Help</option>
+                        <option value="programming">Programming</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category Display Name</label>
+                    <input type="text" id="category" name="category" placeholder="e.g. Historical Fiction" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="publishedYear">Published Year</label>
+                    <input type="number" id="publishedYear" name="publishedYear" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rating">Rating (0-5)</label>
+                    <input type="number" id="rating" name="rating" step="0.1" min="0" max="5" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Cover Image URL</label>
+                    <input type="url" id="image" name="image" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewer">Reviewer Name</label>
+                    <input type="text" id="reviewer" name="reviewer" placeholder="Your Name">
+                </div>
+
+                <div class="form-group">
+                    <label for="review">Review Content</label>
+                    <textarea id="review" name="review" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-book"></i> TT Book</h3>
+                    <p>Your trusted source for honest book reviews.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TT Book. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="/javascripts/script.js"></script>
+</body>
+
+</html>

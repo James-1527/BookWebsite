@@ -19,6 +19,7 @@
             <a href="#home">Home</a>
             <a href="#reviews">Reviews</a>
             <a href="#categories">Categories</a>
+            <a href="/create-book">Add Book</a>
         </nav>
         <div class="actions">
             <div class="search-container">
@@ -61,6 +62,8 @@
                     onclick="filterByCategory('biography')">Biography</button>
                 <button class="category-tag" data-category="self-help"
                     onclick="filterByCategory('self-help')">Self-Help</button>
+                <button class="category-tag" data-category="programming"
+                    onclick="filterByCategory('programming')">Programming</button>
             </div>
         </div>
     </section>
@@ -69,55 +72,76 @@
     <main class="main-content" id="reviews">
         <div class="container">
             <!-- Featured Review Section -->
+            <!-- Featured Review Section -->
             <section class="featured-section">
                 <h2 class="section-title"><i class="fas fa-star"></i> Featured Review</h2>
-                <div class="featured-review">
-                    <div class="featured-book-cover">
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop"
-                            alt="Featured Book">
-                        <div class="rating-badge">
-                            <i class="fas fa-star"></i>
-                            <span>4.8</span>
-                        </div>
-                    </div>
-                    <div class="featured-review-content">
-                        <h3>The Seven Husbands of Evelyn Hugo</h3>
-                        <div class="book-meta">
-                            <span class="author"><i class="fas fa-user"></i> Taylor Jenkins Reid</span>
-                            <span class="genre"><i class="fas fa-tag"></i> Historical Fiction</span>
-                            <span class="date"><i class="fas fa-calendar"></i> Published: 2017</span>
-                        </div>
-                        <div class="rating">
-                            <div class="stars">
+                <% if (featuredBook) { %>
+                    <div class="featured-review">
+                        <div class="featured-book-cover">
+                            <img src="<%= featuredBook.image %>" alt="Featured Book"
+                                onerror="this.src='https://via.placeholder.com/300x450/2c3e50/ffffff?text=<%= encodeURIComponent(featuredBook.title) %>'">
+                            <div class="rating-badge">
                                 <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+                                <span>
+                                    <%= featuredBook.rating %>
+                                </span>
                             </div>
-                            <span class="rating-text">5.0 / 5.0</span>
                         </div>
-                        <div class="review-text">
-                            <p>A mesmerizing tale of old Hollywood glamour, ambition, and forbidden love. Taylor Jenkins
-                                Reid crafts an unforgettable narrative through the lens of a reclusive Hollywood icon
-                                recounting her life story. The novel masterfully explores themes of identity, sacrifice,
-                                and the price of fame, keeping readers captivated from the first page to the last.</p>
-                            <p>The characters are deeply layered and authentic, and the plot twists are both shocking
-                                and satisfying. This is a book that will stay with you long after you've turned the
-                                final page.</p>
-                        </div>
-                        <div class="review-footer">
-                            <div class="reviewer">
-                                <div class="reviewer-avatar">JS</div>
-                                <div class="reviewer-info">
-                                    <div class="reviewer-name">Jane Smith</div>
-                                    <div class="review-date">Reviewed on March 15, 2024</div>
+                        <div class="featured-review-content">
+                            <h3>
+                                <%= featuredBook.title %>
+                            </h3>
+                            <div class="book-meta">
+                                <span class="author"><i class="fas fa-user"></i>
+                                    <%= featuredBook.author %>
+                                </span>
+                                <span class="genre"><i class="fas fa-tag"></i>
+                                    <%= featuredBook.category || featuredBook.genre %>
+                                </span>
+                                <span class="date"><i class="fas fa-calendar"></i> Published: <%=
+                                        featuredBook.publishedYear %></span>
+                            </div>
+                            <div class="rating">
+                                <div class="stars">
+                                    <% for(let i=0; i<Math.floor(featuredBook.rating); i++) { %>
+                                        <i class="fas fa-star"></i>
+                                        <% } %>
+                                            <% if(featuredBook.rating % 1 !==0) { %>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <% } %>
                                 </div>
+                                <span class="rating-text">
+                                    <%= featuredBook.rating %> / 5.0
+                                </span>
                             </div>
-                            <button class="read-more-btn" onclick="viewFullReview(1)">Read Full Review</button>
+                            <div class="review-text">
+                                <p>
+                                    <%= featuredBook.review %>
+                                </p>
+                            </div>
+                            <div class="review-footer">
+                                <div class="reviewer">
+                                    <div class="reviewer-avatar">
+                                        <%= (featuredBook.reviewer || 'A' ).substring(0,2).toUpperCase() %>
+                                    </div>
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-name">
+                                            <%= featuredBook.reviewer || 'Anonymous' %>
+                                        </div>
+                                        <div class="review-date">Reviewed on <%= featuredBook.reviewDate %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="read-more-btn" onclick="viewFullReview('<%= featuredBook.id %>')">Read
+                                    Full Review</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <% } else { %>
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <p>No featured reviews available yet.</p>
+                        </div>
+                        <% } %>
             </section>
 
             <!-- All Reviews Section -->

@@ -526,6 +526,32 @@ header {
   color: var(--accent);
 }
 
+.card-meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.meta-tag,
+.meta-year {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.meta-tag i,
+.meta-year i {
+  color: var(--primary);
+  font-size: 0.8rem;
+}
+
 .card-author {
   color: var(--muted);
   font-size: 0.9rem;
@@ -551,14 +577,27 @@ header {
 .card-footer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   padding-top: 16px;
   border-top: 1px solid rgba(44, 62, 80, 0.1);
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .card-reviewer {
   font-size: 0.85rem;
   color: var(--muted);
+  font-weight: 500;
+}
+
+.card-date {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .view-review-btn {

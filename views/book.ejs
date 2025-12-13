@@ -47,16 +47,18 @@
                     </h3>
                     <div class="book-meta">
                         <span class="author"><i class="fas fa-user"></i>
-                            <%= book.author %>
+                            <%= book.author || 'Unknown Author' %>
                         </span>
                         <!-- Link to category filter on home page -->
-                        <span class="genre">
+                        <span class="meta-tag">
                             <a href="/?category=<%= book.genre %>" style="color: inherit; text-decoration: none;">
                                 <i class="fas fa-tag"></i>
-                                <%= book.category %>
+                                <%= book.category || book.genre || 'Uncategorized' %>
                             </a>
                         </span>
-                        <span class="date"><i class="fas fa-calendar"></i> Published: <%= book.publishedYear %></span>
+                        <span class="meta-year"><i class="fas fa-calendar"></i>
+                            <%= book.publishedYear || 'N/A' %>
+                        </span>
                     </div>
 
                     <div class="rating">
@@ -92,8 +94,12 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="/books/<%= book.id %>/edit" class="read-more-btn" style="text-decoration: none;">Edit
-                            Review</a>
+                        <% if (typeof currentUserId !=='undefined' && book.creatorId && book.creatorId===currentUserId)
+                            { %>
+                            <a href="/books/<%= book.id %>/edit" class="read-more-btn"
+                                style="text-decoration: none;">Edit
+                                Review</a>
+                            <% } %>
                     </div>
                 </div>
             </div>
@@ -113,6 +119,7 @@
             </div>
         </div>
     </footer>
+    <script src="/javascripts/script.js"></script>
 </body>
 
 </html>
