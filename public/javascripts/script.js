@@ -103,7 +103,7 @@ function renderBooks(books) {
                         <span class="card-reviewer">Reviewed by ${book.reviewer || 'Anonymous'}</span>
                         <span class="card-date">${book.reviewDate || ''}</span>
                     </div>
-                    <button class="view-review-btn" onclick="viewFullReview(${book.id})">Read More</button>
+                    <button class="view-review-btn" onclick="viewFullReview('${book.id}')">Read More</button>
                 </div>
             </div>
         </div>
@@ -115,7 +115,8 @@ function renderBooks(books) {
             card.addEventListener('click', function (e) {
                 // Prevent opening modal when clicking on the 'Read More' button (which navigates to book page)
                 if (e.target.closest('.view-review-btn')) return;
-                const id = parseInt(this.getAttribute('data-id'), 10);
+                if (e.target.closest('.view-review-btn')) return;
+                const id = this.getAttribute('data-id');
                 openBookModal(id);
             });
         });
@@ -192,7 +193,7 @@ function handleSearch() {
     if (searchResult) {
         if (filtered.length > 0) {
             searchResult.innerHTML = filtered.slice(0, 5).map(book => `
-                <div class="search-result-item" onclick="selectBook(${book.id})">
+                <div class="search-result-item" onclick="selectBook('${book.id}')">
                     <strong>${book.title}</strong><br>
                     <small>by ${book.author}</small>
                 </div>
@@ -262,7 +263,7 @@ function openBookModal(bookId) {
                 </div>
             </div>
             <div style="margin-top:18px;">
-                <button class="read-more-btn" onclick="viewFullReview(${book.id})">Read Full Review</button>
+                <button class="read-more-btn" onclick="viewFullReview('${book.id}')">Read Full Review</button>
             </div>
         </div>
     `;
@@ -331,9 +332,15 @@ function handleLogin() {
     }, 300);
 }
 
-function handleLogout() {
-    localStorage.removeItem(CURRENT_USER_KEY);
-    updateAuthUI();
+async function handleLogout() {
+    try {
+        await fetch('/users/logout', { method: 'POST' });
+        localStorage.removeItem(CURRENT_USER_KEY);
+        updateAuthUI();
+        window.location.reload(); // Reload to clear server-side state in views
+    } catch (error) {
+        console.error("Logout failed", error);
+    }
 }
 
 // Smooth scroll for navigation links

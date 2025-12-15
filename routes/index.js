@@ -1,6 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models/listbook');
+const multer = require('multer');
+const path = require('path');
+
+// Configure Multer Storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
 
 /* GET home page. */
 /* GET home page. */
@@ -79,10 +93,17 @@ router.get('/create-book', (req, res) => {
 
 /* API: Create Book */
 /* API: Create Book */
-router.post('/create-book', async (req, res) => {
+router.post('/create-book', upload.single('image'), async (req, res) => {
   try {
     if (!req.cookies.userId) {
       return res.status(401).send("Unauthorized: Please log in");
+    }
+
+    let imagePath = '';
+    if (req.file) {
+      imagePath = '/images/' + req.file.filename;
+    } else if (req.body.imageUrl) {
+      imagePath = req.body.imageUrl;
     }
 
     const newBook = new Book({
@@ -93,7 +114,7 @@ router.post('/create-book', async (req, res) => {
       category: req.body.category,
       publishedYear: req.body.publishedYear,
       rating: req.body.rating,
-      image: req.body.image,
+      image: imagePath,
       review: req.body.review,
       reviewer: req.body.reviewer,
       reviewDate: req.body.reviewDate || new Date().toLocaleDateString()
