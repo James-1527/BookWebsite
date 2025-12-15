@@ -808,3 +808,9 @@ header {
     height: 300px;
   }
 }
+.footer {
+  background-color: #3498db;
+}
+.container {
+  color: #ffffff;
+}
