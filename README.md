@@ -16,3 +16,5 @@ A simple Express + EJS web application for adding, reviewing, and browsing books
 - Include a cover image via URL when creating a book
 - View book details and reviews
 
+  http://bookweb-env.eba-fx3zu3kw.us-east-1.elasticbeanstalk.com/
+
